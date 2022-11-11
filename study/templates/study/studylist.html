@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    .hoverGreen:hover{
+background-color: #94B49F;
+    }
+</style>
+<section class="service-wrapper py-3" style="transform: translateY(-15px);">
+    <div class="service-tag py-5" style="background-color: #c9c2a8;">
+        <div class="col-md-12">
+            <ul class="nav d-flex justify-content-center">
+                <li class="nav-item mx-lg-4"  >
+                    <a class="filter-btn nav-link btn-outline-primary active shadow rounded-pill text-light px-4 light-500 hoverGreen" href="#" data-filter=".project" style=" font-weight: 500;">All</a>
+                </li>
+                <li class="nav-item mx-lg-4">
+                    <a class="filter-btn nav-link btn-outline-primary rounded-pill text-light px-4 light-500 hoverGreen"style=" font-weight: 500;" href="#" data-filter=".마포구">마포구</a>
+                </li>
+                <li class="filter-btn nav-item mx-lg-4">
+                    <a class="filter-btn nav-link btn-outline-primary rounded-pill text-light px-4 light-500 hoverGreen" style=" font-weight: 500;"href="#" data-filter=".서대문구">서대문구</a>
+                </li>
+                <li class="nav-item mx-lg-4">
+                    <a class="filter-btn nav-link btn-outline-primary rounded-pill text-light px-4 light-500 hoverGreen" style=" font-weight: 500;"href="#" data-filter=".종로구">종로구</a>
+                </li>
+                <li class="nav-item mx-lg-4">
+                    <a class="filter-btn nav-link btn-outline-primary rounded-pill text-light px-4 light-500 hoverGreen" style=" font-weight: 500;"href="#" data-filter=".중구">중구</a>
+                </li>
+                <li class="nav-item mx-lg-4">
+                    <a class="filter-btn nav-link btn-outline-primary rounded-pill text-light px-4 light-500 hoverGreen"style=" font-weight: 500;" href="#" data-filter=".용산구">용산구</a>
+                </li>
+                <li class="filter-btn nav-item mx-lg-4">
+                    <a class="filter-btn nav-link btn-outline-primary rounded-pill text-light px-4 light-500 hoverGreen" style=" font-weight: 500;"href="#" data-filter=".성동구">성동구</a>
+                </li>
+                <li class="nav-item mx-lg-4">
+                    <a class="filter-btn nav-link btn-outline-primary rounded-pill text-light px-4 light-500 hoverGreen" style=" font-weight: 500;"href="#" data-filter=".동대문구">동대문구</a>
+                </li>
+                <li class="nav-item mx-lg-4">
+                    <a class="filter-btn nav-link btn-outline-primary rounded-pill text-light px-4 light-500 hoverGreen" style=" font-weight: 500;"href="#" data-filter=".성북구">성북구</a>
+                </li>
+                <li class="nav-item mx-lg-4">
+                    <a class="filter-btn nav-link btn-outline-primary rounded-pill text-light px-4 light-500 hoverGreen"style=" font-weight: 500;" href="#" data-filter=".광진구">광진구</a>
+                </li>
+                <li class="filter-btn nav-item mx-lg-4">
+                    <a class="filter-btn nav-link btn-outline-primary rounded-pill text-light px-4 light-500 hoverGreen" style=" font-weight: 500;"href="#" data-filter=".강남구">강남구</a>
+                </li>
+                <li class="nav-item mx-lg-4">
+                </li>
+                <a class="filter-btn nav-link btn-outline-primary rounded-pill text-light px-4 light-500 hoverGreen" style=" font-weight: 500;"href="#" data-filter=".송파구">송파구</a>
+                <li class="nav-item mx-lg-4">
+                    <a class="filter-btn nav-link btn-outline-primary rounded-pill text-light px-4 light-500 hoverGreen" style=" font-weight: 500;"href="#" data-filter=".서초구">서초구</a>
+                </li>
+                <li class="nav-item mx-lg-4">
+                    <a class="filter-btn nav-link btn-outline-primary rounded-pill text-light px-4 light-500 hoverGreen" style=" font-weight: 500;"href="#" data-filter=".관악구">관악구</a>
+                </li>
+                <li class="nav-item mx-lg-4">
+                    <a class="filter-btn nav-link btn-outline-primary rounded-pill text-light px-4 light-500 hoverGreen" style=" font-weight: 500;"href="#" data-filter=".동작구">동작구</a>
+                </li>
+                <li class="nav-item mx-lg-4">
+                    <a class="filter-btn nav-link btn-outline-primary rounded-pill text-light px-4 light-500 hoverGreen" style=" font-weight: 500;"href="#" data-filter=".영등포구">영등포구</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+</section>
+
+<section class="container overflow-hidden py-5" style="margin-right: 10px;">
+    <div class="row gx-5 gx-sm-3 gx-lg-5 gy-lg-5 gy-3 pb-3 projects">
+
+            {%for study in posts%}
+    
+            <div class="col-xl-3 col-md-4 col-sm-6 project ui graphic">
+                <a href="{%url 'study:detail' study.id%}" class="service-work card border-0 text-white shadow-sm overflow-hidden mx-5 m-sm-0">
+                  <img class="card-img" src="{{study.image.url}}" alt="Card image">
+                    <div class="service-work-vertical pics card-img-overlay d-flex align-items-end">
+                        <div class="service-work-content text-left text-light">
+                            <p class="card-text" style="margin: 6px;">{{study.name}}</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {%endfor%}
+
+    </div>
+</section>
+{% endblock %}

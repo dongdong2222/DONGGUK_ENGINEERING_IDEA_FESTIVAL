@@ -1,0 +1,186 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+
+    /* h1 {
+  padding: 0.7rem;
+  border-left: 5px solid rgb(113, 127, 247);
+  background: #dee3ff;
+} */
+    .first_a{
+        border: 2px solid none;
+        background-color: #a3c2ad;
+        padding: 4px 7px;        
+        border-radius: 10px;
+        text-decoration: none;
+        color: whitesmoke;
+
+    }
+    a:hover{
+        color: black;
+    }
+    .postImage{
+        width: 300px;
+        border-radius: 20px;
+    }
+
+    .end_a
+    {
+        text-decoration: none;
+        color: whitesmoke;
+    }
+    button{
+      background:#94B49F;
+      color:#fff;
+      border:none;
+      position:relative;
+      height:40px;
+      font-size:1em;
+      padding:0 20px;
+      cursor:pointer;
+      transition:800ms ease all;
+      outline:none;
+    }
+    button:hover{
+      background:#aed0ba;
+      color:#94B49F;
+    }
+    button:before,button:after{
+      content:'';
+      position:absolute;
+      top:0;
+      right:0;
+      height:2px;
+      width:0;
+      background: #94B49F;
+      transition:400ms ease all;
+    }
+    button:after{
+      right:inherit;
+      top:inherit;
+      left:0;
+      bottom:0;
+    }
+    button:hover:before,button:hover:after{
+      width:100%;
+      transition:800ms ease all;
+    }
+    .titleBox{
+        border-radius: 1em; 
+        padding: 0.6em 1em; 
+        background: #ffffff; 
+        box-shadow: 1px 2px 10px rgba(0,0,0,0.2);  
+        margin-left: 5px;
+    }
+    .bodyBox{
+        border-radius: 1em; 
+        padding: 0.8em 1em; 
+        background: #ffffff; 
+        box-shadow: 1px 2px 10px rgba(0,0,0,0.2);  
+        margin-left: 5px;
+    }
+</style>
+{% if user.is_authenticated %}
+<section style="margin: 20px; margin-left: 35px; margin-top: 30px;">
+    <h1 class="titleBox">산책로 이름 : {{post.name}}</h1>
+    <br>
+    <div class="bodyBox">
+    <h5 style="display: inline;">작성자 :</h5> <a class="first_a" href="{% url 'mypage:mypage' post.writer.id %}" >{{post.writer}}</a>&nbsp;&nbsp;&nbsp;&nbsp;
+    <hr>
+    <hr>
+
+    <div class="bodyBox">
+        <h3>산책로 정보</h3> {{post.body}}
+        <br><br>
+
+        {%if post.image%}
+        <h3>관련 이미지</h3> 
+        <img class="postImage" src="{{ post.image.url }}"  alt="사진 나올 곳" style="width:65%" ><br>
+        {%endif%}
+
+      <!--좋아요-->
+      <span href="#" class="like" name ="{{post.id}}" value="Like">
+        {% if user in post.like_user_set.all %}
+            <div class="alt-service-icon">
+                <i class="fas fa-heart" id ="like-icon" style="color:red;"></i>
+            </div>
+        {% else %}
+                <div class="alt-service-icon">
+                <i class="far fa-heart" id ="like-icon" style="color:red;"></i>
+            </div>
+        {% endif %}
+            <span id="count-{{ post.id }}" class="alt-services-title font-alt">
+                좋아요
+            {% if post.like_count == 0 %}
+                0개
+            {% else %}
+                {{ post.like_count }}개
+            {% endif %}
+            </span>
+      </span>
+
+      <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+      <script>
+        $(".like").click(function(){
+            var pk=$(this).attr('name')
+            $.ajax({
+                type:'POST',
+                url:"{% url 'study:like_toggle' post.pk %}",
+                data:{'pk':pk,'csrfmiddlewaretoken':'{{csrf_token}}'},
+                dataType:'json',
+                success:function(response){
+                    if(response.like_count==null){
+                        alert('로그인이 필요합니다.');
+                        window.location.replace('/accounts/login/');
+                    }
+                    else{
+                        if(response.result=='like'){
+                        $('#like-icon').removeClass();
+                            $('#like-icon').addClass('fas fa-heart');
+                        }
+                        else{
+                            $('#like-icon').removeClass();
+                            $('#like-icon').addClass('far fa-heart');
+                        }
+                        $('#count-{{post.pk}}').html('좋아요'+response.like_count+"개");
+                    }
+                },
+                error:function(request, status, error){
+                    alert("로그인이 필요합니다.")
+                    alert('code:'+request.status+'\n'+'message:'+request.responseText+"\n"+"error:"+error);
+                },
+            })
+        })
+      </script>
+      <!--좋아요-->
+
+
+    </div>
+    
+
+    {%if is_author%}
+    <!-- 접속자가 글 작성자라면 -->
+    </div>
+    <br>
+            <button><a class="end_a" href="{% url 'study:edit' post.id %}">수정하기</a></button>
+            <button><a class="end_a" href="{% url 'study:delete' post.id %}">삭제하기</a></button>
+    {%endif%}
+
+    {%if user.is_superuser%}
+    <button style="margin-top: 10px;"><a class="end_a" href="{% url 'study:delete' post.id %}">삭제하기</a></button>
+    {%endif%}
+</section>
+
+
+{% else %}
+<div style="display:block; text-align: center; width:900px;margin: 300px auto; position:relative;">
+  <h3>로그인 후 이용 가능</h3>
+  <br>
+  <a href="{% url 'account_login' %}" class="btn " style="background-color: rgb(218, 218, 248);">로그인</a>
+  <a href="{% url 'account_signup' %}" class="btn " style="background-color: rgb(218, 218, 248);">회원가입</a>
+</div>
+{% endif %}
+{% endblock %}
+
